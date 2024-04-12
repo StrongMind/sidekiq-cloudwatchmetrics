@@ -1,9 +1,9 @@
 # coding: utf-8
 Gem::Specification.new do |spec|
-  spec.name          = "sidekiq-cloudwatchmetrics"
-  spec.version       = "2.6.0"
-  spec.author        = "Samuel Cochran"
-  spec.email         = "sj26@sj26.com"
+  spec.name          = "strongmind-sidekiq-cloudwatchmetrics"
+  spec.version       = "2.6.1"
+  spec.author        = "StrongMind Devops"
+  spec.email         = "devops@strongmind.com"
 
   spec.summary       = %q{Publish Sidekiq metrics to AWS CloudWatch}
   spec.description   = <<~EOS
