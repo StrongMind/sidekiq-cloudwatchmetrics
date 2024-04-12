@@ -24,7 +24,7 @@ Add near your Sidekiq configuration, like in `config/initializers/sidekiq.rb` in
 
 ```ruby
 require "sidekiq"
-require "sidekiq/cloudwatchmetrics"
+require "sidekiq/cloud_watch_metrics"
 
 Sidekiq::CloudWatchMetrics.enable!
 ```
@@ -40,10 +40,9 @@ Sidekiq::CloudWatchMetrics.enable!(client: Aws::CloudWatch::Client.new)
 
   [cwclient]: https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/CloudWatch/Client.html
 
-The default namespace for metrics is "Sidekiq". You can configure this with the `namespace` option:
-
+Add 'NAMESPACE' to your environment variables (this var is already available in StrongMind Rails deployments) or explicitly supply a namespace:
 ```ruby
-Sidekiq::CloudWatchMetrics.enable!(client: Aws::CloudWatch::Client.new, namespace: "Sidekiq-Staging")
+Sidekiq::CloudWatchMetrics.enable!(client: Aws::CloudWatch::Client.new, namespace: ENV.fetch('NAMESPACE'), metrics_to_publish: %w[enqueued_jobs busy_workers], interval: 60)
 ```
 
 
