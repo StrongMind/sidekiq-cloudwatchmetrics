@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
     Optimised for Sidekiq Enterprise with leader election, but works everywhere!
   EOS
-  spec.homepage      = "https://github.com/sj26/sidekiq-cloudwatchmetrics"
+  spec.homepage      = "https://github.com/StrongMind/strongmind-sidekiq-cloudwatchmetrics"
   spec.license       = "MIT"
 
   spec.files         = Dir["README.md", "LICENSE", "lib/**/*.rb"]
