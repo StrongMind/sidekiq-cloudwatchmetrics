@@ -1,8 +1,7 @@
-# frozen_string_literal: true
+
 
 require "sidekiq"
 require "sidekiq/api"
-
 require "aws-sdk-cloudwatch"
 
 module Sidekiq::CloudWatchMetrics
@@ -43,9 +42,7 @@ module Sidekiq::CloudWatchMetrics
       include Sidekiq::Component
     end
 
-    INTERVAL = 60 # seconds
-
-    def initialize(config: Sidekiq, client: Aws::CloudWatch::Client.new, namespace: "Sidekiq", process_metrics: true, additional_dimensions: {})
+    def initialize(config: Sidekiq, client: Aws::CloudWatch::Client.new, namespace: "Sidekiq", process_metrics: true, additional_dimensions: {}, metrics_to_publish: [], interval: 60)
       # Sidekiq 6.5+ requires @config, which defaults to the top-level
       # `Sidekiq` module, but can be overridden when running multiple Sidekiqs.
       @config = config
@@ -53,6 +50,8 @@ module Sidekiq::CloudWatchMetrics
       @namespace = namespace
       @process_metrics = process_metrics
       @additional_dimensions = additional_dimensions.map { |k, v| {name: k.to_s, value: v.to_s} }
+      @metrics_to_publish = metrics_to_publish
+      @interval = interval
     end
 
     def start
@@ -77,7 +76,7 @@ module Sidekiq::CloudWatchMetrics
         publish
 
         now = Time.now.to_f
-        tick = [tick + INTERVAL, now].max
+        tick = [tick + @interval, now].max
         sleep(tick - now) if tick > now
       end
 
@@ -231,11 +230,11 @@ module Sidekiq::CloudWatchMetrics
       end
 
       # We can only put 20 metrics at a time
-      metrics.each_slice(20) do |some_metrics|
+      metrics.select { |metric| @metrics_to_publish.include?(metric[:metric_name]) }.each_slice(20) do |some_metrics|
         @client.put_metric_data(
           namespace: @namespace,
           metric_data: some_metrics,
-        )
+          )
       end
     end
 
@@ -272,3 +271,4 @@ module Sidekiq::CloudWatchMetrics
     end
   end
 end
+

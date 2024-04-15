@@ -1,9 +1,9 @@
 # coding: utf-8
 Gem::Specification.new do |spec|
-  spec.name          = "sidekiq-cloudwatchmetrics"
-  spec.version       = "2.6.0"
-  spec.author        = "Samuel Cochran"
-  spec.email         = "sj26@sj26.com"
+  spec.name          = "strongmind-sidekiq-cloudwatchmetrics"
+  spec.version       = "2.6.1"
+  spec.author        = "StrongMind Devops"
+  spec.email         = "devops@strongmind.com"
 
   spec.summary       = %q{Publish Sidekiq metrics to AWS CloudWatch}
   spec.description   = <<~EOS
@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
     Optimised for Sidekiq Enterprise with leader election, but works everywhere!
   EOS
-  spec.homepage      = "https://github.com/sj26/sidekiq-cloudwatchmetrics"
+  spec.homepage      = "https://github.com/StrongMind/strongmind-sidekiq-cloudwatchmetrics"
   spec.license       = "MIT"
 
   spec.files         = Dir["README.md", "LICENSE", "lib/**/*.rb"]
