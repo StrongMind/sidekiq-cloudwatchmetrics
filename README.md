@@ -54,7 +54,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/sj26/sidekiq-cloudwatchmetrics.
+Bug reports and pull requests are welcome on GitHub at https://github.com/StrongMind/strongmind-sidekiq-cloudwatchmetrics.
 
 ## License
 
