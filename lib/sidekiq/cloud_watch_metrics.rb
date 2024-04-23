@@ -42,7 +42,7 @@ module Sidekiq::CloudWatchMetrics
       include Sidekiq::Component
     end
 
-    def initialize(config: Sidekiq, client: Aws::CloudWatch::Client.new, namespace: "Sidekiq", process_metrics: true, additional_dimensions: {}, metrics_to_publish: [], interval: 60)
+    def initialize(config: Sidekiq, client: Aws::CloudWatch::Client.new, namespace: "Sidekiq", process_metrics: true, additional_dimensions: {}, metrics_to_publish: %w[EnqueuedJobs], interval: 60)
       # Sidekiq 6.5+ requires @config, which defaults to the top-level
       # `Sidekiq` module, but can be overridden when running multiple Sidekiqs.
       @config = config
