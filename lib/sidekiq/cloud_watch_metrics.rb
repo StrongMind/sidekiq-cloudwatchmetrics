@@ -42,7 +42,7 @@ module Sidekiq::CloudWatchMetrics
       include Sidekiq::Component
     end
 
-    def initialize(config: Sidekiq, client: Aws::CloudWatch::Client.new(region: 'us-west-2'), namespace: ENV.fetch('NAMESPACE', 'Default-Sidekiq-CloudWatchMetrics'), process_metrics: true, additional_dimensions: {}, metrics_to_publish: %w[EnqueuedJobs], interval: 60)
+    def initialize(config: Sidekiq, client: Aws::CloudWatch::Client.new(region: 'us-west-2'), namespace: ENV.fetch('NAMESPACE', 'Default-Sidekiq-CloudWatchMetrics'), process_metrics: true, additional_dimensions: {}, interval: 60, **kwargs)
       # Sidekiq 6.5+ requires @config, which defaults to the top-level
       # `Sidekiq` module, but can be overridden when running multiple Sidekiqs.
       @config = config
@@ -50,7 +50,7 @@ module Sidekiq::CloudWatchMetrics
       @namespace = namespace
       @process_metrics = process_metrics
       @additional_dimensions = additional_dimensions.map { |k, v| {name: k.to_s, value: v.to_s} }
-      @metrics_to_publish = metrics_to_publish
+      @metrics_to_publish = kwargs[:metrics_to_publish] || []
       @interval = interval
     end
 
@@ -228,12 +228,13 @@ module Sidekiq::CloudWatchMetrics
           metric[:dimensions] = (metric[:dimensions] || []) + @additional_dimensions
         end
       end
-
       # We can only put 20 metrics at a time
-      metrics.select { |metric| @metrics_to_publish.include?(metric[:metric_name]) }.each_slice(20) do |some_metrics|
+      custom_metrics = @metrics_to_publish&.any? ? metrics.select { |metric| @metrics_to_publish.include?(metric[:metric_name]) } : metrics
+
+      custom_metrics.each_slice(20) do |metric_to_publish|
         @client.put_metric_data(
           namespace: @namespace,
-          metric_data: some_metrics,
+          metric_data: metric_to_publish,
           )
       end
     end
