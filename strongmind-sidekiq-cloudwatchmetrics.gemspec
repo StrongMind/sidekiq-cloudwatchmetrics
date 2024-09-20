@@ -1,7 +1,7 @@
 # coding: utf-8
 Gem::Specification.new do |spec|
   spec.name          = "strongmind-sidekiq-cloudwatchmetrics"
-  spec.version       = "2.6.5"
+  spec.version       = "2.6.6"
   spec.author        = "StrongMind Devops"
   spec.email         = "devops@strongmind.com"
 
