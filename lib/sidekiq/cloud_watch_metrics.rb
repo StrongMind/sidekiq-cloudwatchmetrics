@@ -223,7 +223,7 @@ module Sidekiq::CloudWatchMetrics
         }
       end
 
-      highest_latency_metric = metrics.select { |metric| metric[:name] == 'QueueLatency' }
+      highest_latency_metric = metrics.select { |metric| metric[:metric_name] == 'QueueLatency' }
                                 .max_by { |metric| metric[:value] }
 
       metrics << {
